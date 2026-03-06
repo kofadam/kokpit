@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+kokpit-env/
+*.db
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Rust/Tauri
+src-tauri/target/
+
+# macOS
+.DS_Store
