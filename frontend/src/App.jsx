@@ -20,9 +20,12 @@ export default function App() {
 
   // Load models + sessions on mount
   useEffect(() => {
+  // give the backend a moment to start
+  setTimeout(() => {
     fetchModels().then((d) => setModels(d.models || []));
     loadSessions();
-  }, []);
+  }, 2000);
+}, []);
 
   // Load messages when active session changes
   useEffect(() => {

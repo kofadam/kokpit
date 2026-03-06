@@ -1,14 +1,21 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-import asyncio
 
 from database import init_db, get_sessions, get_session, create_session, \
     update_session, delete_session, get_messages, save_message, clear_messages
 from ollama import get_models, stream_chat
 from models import CreateSessionRequest, UpdateSessionRequest, ChatRequest
 
-app = FastAPI(title="Kokpit API")
+
+@asynccontextmanager
+async def lifespan(app):
+    await init_db()
+    yield
+
+
+app = FastAPI(title="Kokpit API", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,11 +23,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-@app.on_event("startup")
-async def startup():
-    await init_db()
 
 
 # ── Models ────────────────────────────────────────────
